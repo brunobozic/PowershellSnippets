@@ -12,9 +12,20 @@ $DebugPreference = "Continue"
 #Terminate Code on All Errors
 #$ErrorActionPreference = "Stop"
 
+
 # -Command "& C:\Scripts\Get-MailboxAuditLoggingReport.ps1 -Mailbox ProblemMailbox -Hours 24 -SendEmail -MailFrom administrator@contoso.com -MailTo administrator@contoso.com -MailServer mail.contoso.com"
 # -Command "& C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1 -sourceInstance VS2008DEVELOP\MSSQLSERVERR2,1434 -destinationInstance NINO\EXPRESS2017 -destinationDbName EuMobil.Develop -networkSharePath \\NINO\DatabaseBackups\"
 # ./DbBackupAndRestoreParametrized.ps1 -sourceInstanceName "VS2008DEVELOP\MSSQLSERVERR2,1434" -sourceDatabaseName "EuMobil.Develop" -destinationInstanceName "NINO\EXPRESS2017" -destinationDatabaseName "EuMobil.Develop" -backupPath_FileShare "\\NINO\DatabaseBackups\"
+# -Command "& C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1 "VS2008DEVELOP\MSSQLSERVERR2,1434" "EuMobil.Develop" "NINO\EXPRESS2017" "EuMobil.Develop" "\\NINO\DatabaseBackups\"; exit $LASTEXITCODE
+# .\DbBackupAndRestoreParametrized.ps1 "VS2008DEVELOP\MSSQLSERVERR2,1434" "EuMobil.Develop" "NINO\EXPRESS2017" "EuMobil.Develop" "\\NINO\DatabaseBackups'
+# -Command "& C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1 -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'"
+# -noexit -Command "& C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1 -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'; exit $LASTEXITCODE"
+# -noexit -Command "& 'C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1'" -sourceInstanceName VS2008DEVELOP\MSSQLSERVERR2,1434 -sourceDatabaseName EuMobil.Develop -destinationInstanceName NINO\EXPRESS2017 -destinationDatabaseName EuMobil.Develop -backupPath_FileShare \\NINO\DatabaseBackups\
+
+# # -ExecutionPolicy Bypass -Command "& 'C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1' -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'"
+# -ExecutionPolicy Bypass -File "C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1" -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'"
+# powershell  -File "C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1" -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'"
+# .\DbBackupAndRestoreParametrized.ps1 "VS2008DEVELOP\MSSQLSERVERR2,1434" "EuMobil.Develop" "NINO\EXPRESS2017" "EuMobil.Develop" "\\NINO\DatabaseBackups\"
 
 
 #$sourceInstanceName = "VS2008DEVELOP\MSSQLSERVERR2,1434"
@@ -26,12 +37,10 @@ $DebugPreference = "Continue"
 #$destinationDatabaseName = "EuMobil.Develop"
 # Set new or existing database name to restore backup
 #$destinationDbname = "EuMobil.Develop"
-#$destinationBackedUpFileExtenstion = ".bak"
+$destinationBackedUpFileExtenstion = ".bak"
 
 # Set the existing backup file path
 $backupPath = $backupPath_FileShare + $destinationDbname + $destinationBackedUpFileExtenstion
-
-#Main $sourceInstanceName $sourceDatabaseName $destinationInstanceName $destinationDatabaseName $backupPath_FileShare
 
 function Main{
  
@@ -79,14 +88,14 @@ function ValidateAndMakePreflightChecks {
     if([String]::IsNullOrEmpty($sourceInstanceName))
     {
         Write-Host "ERROR"
-        $errorMessage = "Source server name is not valid."
+        $errorMessage = "Source server name is not valid." + $sourceInstanceName
         throw $errorMessage
     }
 
     if([String]::IsNullOrEmpty($sourceDatabaseName))
     {
         Write-Host "ERROR"
-        $errorMessage = "Source database name is not valid."
+        $errorMessage = "Source database name is not valid." + $sourceDatabaseName
         throw $errorMessage
     }
 
@@ -250,7 +259,8 @@ function DoRestore {
         $dbRestore.Database = $destinationDatabaseName
         $dbRestore.NoRecovery = $false
         $dbRestore.PercentCompleteNotification = 10
-        $dbRestore.Devices.AddDevice($networkSharePath, "File")
+        $fullPath = $networkSharePath + $destinationDatabaseName + ".bak"
+        $dbRestore.Devices.AddDevice($fullPath, "File")
 
         # Set the databse file location
         Write-Host "3.a. Setting destination database file locations: "
@@ -329,10 +339,11 @@ function DoRestore {
 
             # Set database and backup file path
             $dbRestore.ReplaceDatabase = $True
-            $dbRestore.Database = $destinationDbname
+            $dbRestore.Database = $destinationDatabaseName
             $dbRestore.NoRecovery = $false
             $dbRestore.PercentCompleteNotification = 10
-            $dbRestore.Devices.AddDevice($backupPath, "File")
+            $fullPath = $networkSharePath + $destinationDatabaseName + ".bak"
+            $dbRestore.Devices.AddDevice($fullPath, "File")
 
             # Set the databse file location
 
@@ -342,12 +353,12 @@ function DoRestore {
             $dbRestoreLog = new-object("Microsoft.SqlServer.Management.Smo.RelocateFile")
             $dbRestoreFile.LogicalFileName = "EuMobil.Prod"
 
-            Write-Host "  [O] Physical path to mdf : " $sqlServer.Information.MasterDBPath $dbRestore.Database ".mdf"
+            Write-Host "  [O] Physical path to mdf : " $sqlServer.Information.MasterDBPath"\"$dbRestore.Database".mdf"
 
             $dbRestoreFile.PhysicalFileName = $sqlServer.Information.MasterDBPath + "\" + $dbRestore.Database + "_Data.mdf"
             $dbRestoreLog.LogicalFileName = "EuMobil.Prod" + "_Log"
 
-            Write-Host "  [O] Physical path to ldf: " $sqlServer.Information.MasterDBLogPath $dbRestore.Database "_Log.ldf"
+            Write-Host "  [O] Physical path to ldf: " $sqlServer.Information.MasterDBLogPath"\"$dbRestore.Database"_Log.ldf"
 
             $dbRestoreLog.PhysicalFileName = $sqlServer.Information.MasterDBLogPath + "\" + $dbRestore.Database + "_log.LDF"
 
@@ -424,4 +435,28 @@ function DoBackup {
          write-host "Backup created."
     }
 }
+
+
+#Capture inputs from the command line.
+$sourceInstanceName = $args[0]
+$sourceDatabaseName = $args[1]
+$destinationInstanceName = $args[2]
+$destinationDatabaseName = $args[3]
+$backupPath_FileShare = $args[4]
+
+
+$debug = "Source Instance Parameter: " + $sourceInstanceName
+Write-Debug $debug
+$debug = "Source Database Parameter: " + $sourceDatabaseName
+Write-Debug $debug
+$debug = "Destination Db Instance Parameter: " + $destinationInstanceName
+Write-Debug $debug
+$debug = "Destination Database Name Parameter: " + $destinationDatabaseName
+Write-Debug $debug
+$debug = "Network share: " + $backupPath_FileShare
+Write-Debug $debug
+
+Main $sourceInstanceName $sourceDatabaseName $destinationInstanceName $destinationDatabaseName $backupPath_FileShare
+
+Exit 5
 
