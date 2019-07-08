@@ -12,31 +12,17 @@ $DebugPreference = "Continue"
 #Terminate Code on All Errors
 #$ErrorActionPreference = "Stop"
 
-
-# -Command "& C:\Scripts\Get-MailboxAuditLoggingReport.ps1 -Mailbox ProblemMailbox -Hours 24 -SendEmail -MailFrom administrator@contoso.com -MailTo administrator@contoso.com -MailServer mail.contoso.com"
-# -Command "& C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1 -sourceInstance VS2008DEVELOP\MSSQLSERVERR2,1434 -destinationInstance NINO\EXPRESS2017 -destinationDbName EuMobil.Develop -networkSharePath \\NINO\DatabaseBackups\"
-# ./DbBackupAndRestoreParametrized.ps1 -sourceInstanceName "VS2008DEVELOP\MSSQLSERVERR2,1434" -sourceDatabaseName "EuMobil.Develop" -destinationInstanceName "NINO\EXPRESS2017" -destinationDatabaseName "EuMobil.Develop" -backupPath_FileShare "\\NINO\DatabaseBackups\"
-# -Command "& C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1 "VS2008DEVELOP\MSSQLSERVERR2,1434" "EuMobil.Develop" "NINO\EXPRESS2017" "EuMobil.Develop" "\\NINO\DatabaseBackups\"; exit $LASTEXITCODE
-# .\DbBackupAndRestoreParametrized.ps1 "VS2008DEVELOP\MSSQLSERVERR2,1434" "EuMobil.Develop" "NINO\EXPRESS2017" "EuMobil.Develop" "\\NINO\DatabaseBackups'
-# -Command "& C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1 -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'"
-# -noexit -Command "& C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1 -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'; exit $LASTEXITCODE"
-# -noexit -Command "& 'C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1'" -sourceInstanceName VS2008DEVELOP\MSSQLSERVERR2,1434 -sourceDatabaseName EuMobil.Develop -destinationInstanceName NINO\EXPRESS2017 -destinationDatabaseName EuMobil.Develop -backupPath_FileShare \\NINO\DatabaseBackups\
-
-# # -ExecutionPolicy Bypass -Command "& 'C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1' -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'"
-# -ExecutionPolicy Bypass -File "C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1" -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'"
-# powershell  -File "C:\Dev\PowershellSnippets\DbBackupAndRestore\DbBackupAndRestoreParametrized.ps1" -sourceInstanceName 'VS2008DEVELOP\MSSQLSERVERR2,1434' -sourceDatabaseName 'EuMobil.Develop' -destinationInstanceName 'NINO\EXPRESS2017' -destinationDatabaseName 'EuMobil.Develop' -backupPath_FileShare '\\NINO\DatabaseBackups\'"
 # .\DbBackupAndRestoreParametrized.ps1 "VS2008DEVELOP\MSSQLSERVERR2,1434" "EuMobil.Develop" "NINO\EXPRESS2017" "EuMobil.Develop" "\\NINO\DatabaseBackups\"
 
-
-#$sourceInstanceName = "VS2008DEVELOP\MSSQLSERVERR2,1434"
-#$backupPath_FileShare = "\\NINO\DatabaseBackups\"
-#$sourceDatabaseName = "EuMobil.Develop"
+$sourceInstanceName = "VS2008DEVELOP\MSSQLSERVERR2,1434"
+$backupPath_FileShare = "\\NINO\DatabaseBackups\"
+$sourceDatabaseName = "EuMobil.Develop"
 
 # Set destination SQL Server instance name
-#$destinationInstanceName = "NINO\EXPRESS2017"
-#$destinationDatabaseName = "EuMobil.Develop"
+$destinationInstanceName = "NINO\EXPRESS2017"
+$destinationDatabaseName = "EuMobil.Develop"
 # Set new or existing database name to restore backup
-#$destinationDbname = "EuMobil.Develop"
+$destinationInstanceName = "EuMobil.Develop"
 $destinationBackedUpFileExtenstion = ".bak"
 
 # Set the existing backup file path
