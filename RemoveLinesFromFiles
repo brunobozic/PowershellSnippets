@@ -1,0 +1,6 @@
+Get-ChildItem "d:\tmp" -Recurse -Include *.sql |
+Foreach-Object {
+    $content = Get-Content $_.FullName
+    $content | Where-Object {$_ -match 'TABLESPACE USERS'} | Set-Content $_.FullName
+  
+}
