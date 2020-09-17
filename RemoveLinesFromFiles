@@ -4,3 +4,12 @@ Foreach-Object {
     $content | Where-Object {$_ -match 'TABLESPACE USERS'} | Set-Content $_.FullName
   
 }
+
+
+
+Get-ChildItem "C:\RepositoriesWorkspace\DonatClientReplaceTest" -Recurse -Include *.vb |
+Foreach-Object {
+    $content = Get-Content $_.FullName
+    $content | Where-Object {$_ -notlike '*ShowInkButton*'} | Set-Content $_.FullName
+  
+}
