@@ -1,0 +1,6 @@
+Import-Csv 'C:\Users\bbozic1\Downloads\Untitled spreadsheet - Sheet1.csv' | ForEach-Object {   
+    $result = $_.Name -creplace '(?s)^.*\\', ''
+    $result2 = $result -creplace '[^.]*$', ''
+    $result3 = $result2-replace '[\.]', ''
+    Write-Host $result3
+ }
