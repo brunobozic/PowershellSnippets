@@ -4,3 +4,5 @@ Import-Csv 'C:\Users\bbozic1\Downloads\Untitled spreadsheet - Sheet1.csv' | ForE
     $result3 = $result2-replace '[\.]', ''
     Write-Host $result3
  }
+
+Get-Content "C:\Users\bbozic1\Downloads\Donat klijent nazivi formi - List of form names.csv" | foreach { "'$_'" } | Out-File "C:\Users\bbozic1\Downloads\Donat klijent nazivi formi - List of form names fixed.csv"
